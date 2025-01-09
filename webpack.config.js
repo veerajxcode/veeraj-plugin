@@ -2,9 +2,7 @@ const path = require('path');
 
 module.exports = {
   entry: {
-   // main: './assets/js/main.js', // Main script
     admin: './assets/js/admin-script.js', // Admin script
-   // table: './assets/js/gutenberg-block/table.js', // Gutenberg block script
   },
   output: {
     filename: '[name].bundle.js', // Dynamically name bundles based on the entry key
