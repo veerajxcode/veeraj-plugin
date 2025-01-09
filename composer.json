@@ -1,0 +1,19 @@
+{
+    "name": "veeraj/veeraj-plugin",
+    "description": "A custom WordPress plugin for retrieving and displaying data from a remote API.",
+    "type": "wordpress-plugin",
+    "license": "GPL-2.0-or-later",
+    "autoload": {
+        "psr-4": {
+            "Veeraj\\VeerajPlugin\\": "includes/"
+        }
+    },
+    "authors": [
+        {
+            "name": "veerajxcode",
+            "email": "veeraj11yadav@gmail.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {}
+}

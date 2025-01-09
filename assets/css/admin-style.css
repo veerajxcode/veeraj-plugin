@@ -1,0 +1,77 @@
+.veeraj-card {
+    background: #fff;
+    border: 1px solid #ccd0d4;
+    border-radius: 5px;
+    padding: 20px;
+    margin-top: 20px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.veeraj-card h1 {
+    font-size: 24px;
+    margin-bottom: 15px;
+}
+
+.veeraj-card p {
+    font-size: 16px;
+    line-height: 1.5;
+}
+
+.veeraj-data-container {
+    background: #f9f9f9;
+    border: 1px dashed #ccd0d4;
+    padding: 10px;
+    margin-top: 15px;
+    font-family: monospace;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+#refresh-data-button {
+    display: inline-block;
+    margin-top: 10px;
+}
+
+/* General table styling */
+.veeraj-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #ffffff;
+    border: 1px solid #ccd0d4;
+    margin-top: 20px;
+    font-size: 14px;
+    text-align: left;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+/* Header styles */
+.veeraj-table thead th {
+    background: #f4f6f9;
+    color: #333;
+    padding: 10px 15px;
+    border-bottom: 1px solid #ccd0d4;
+    text-transform: uppercase;
+    font-weight: 600;
+}
+
+/* Row styles */
+.veeraj-table tbody tr:nth-child(even) {
+    background: #f9f9f9;
+}
+
+.veeraj-table tbody tr:nth-child(odd) {
+    background: #ffffff;
+}
+
+.veeraj-table tbody td {
+    padding: 10px 15px;
+    border-bottom: 1px solid #eaeaea;
+    color: #555;
+}
+
+/* Hover effect for rows */
+.veeraj-table tbody tr:hover {
+    background: #f4f8fc;
+}

@@ -1,0 +1,27 @@
+{
+  "name": "veeraj-plugin",
+  "version": "1.0.0",
+  "description": "A custom WordPress plugin for retrieving and displaying data from a remote API.",
+  "main": "index.js",
+  "scripts": {
+    "dev": "webpack --mode development",
+    "build": "webpack --mode production",
+    "format": "prettier --write 'assets/js/**/*.js'",
+    "start": "webpack serve --mode development"
+  },
+  "dependencies": {
+    "jquery": "^3.6.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.26.0",
+    "@babel/preset-env": "^7.26.0",
+    "@babel/preset-react": "^7.26.3",
+    "babel-loader": "^9.2.1",
+    "prettier": "^2.3.2",
+    "webpack": "^5.56.0",
+    "webpack-cli": "^4.8.0",
+    "webpack-dev-server": "^4.3.0"
+  },
+  "author": "Veeraj Yadav",
+  "license": "GPL-2.0-or-later"
+}
