@@ -50,7 +50,13 @@ class Main {
         add_action( 'wp_ajax_nopriv_get_veeraj_data', [ $this, 'fetch_veeraj_data' ] ); // For non-logged-in users
 
         add_action( 'enqueue_block_editor_assets', [ $this, 'enqueue_block_assets' ] );
-        //add_action('rest_api_init', [$this, 'register_routes']);
+
+        // Register block with dynamic rendering.
+        add_action( 'init', function() {
+            register_block_type( 'veeraj/table-block', [
+                'render_callback' => [ $this, 'render_table_block' ],
+            ] );
+        } );
     }
 
     /**
@@ -65,6 +71,24 @@ class Main {
     }
 
     public function enqueue_block_assets() {
+
+        if ( ! is_admin() ) {
+            wp_enqueue_script(
+                'veeraj-frontend-script',
+                VEERAJ_PLUGIN_URL . 'assets/js/dist/table-frontend.bundle.js',
+                [],
+                VEERAJ_PLUGIN_VERSION,
+                true
+            );
+    
+            wp_enqueue_style(
+                'veeraj-frontend-style',
+                VEERAJ_PLUGIN_URL . 'assets/css/gutenberg-block/frontend-style.css',
+                [],
+                VEERAJ_PLUGIN_VERSION
+            );
+        }
+
         wp_enqueue_script(
             'veeraj-block-script',
             VEERAJ_PLUGIN_URL .'assets/js/dist/block.bundle.js',
@@ -81,14 +105,6 @@ class Main {
             ]
         );
 
-    }
-
-    public function register_routes()
-    {
-        register_rest_route('veeraj/v1', '/data', [
-            'methods' => 'GET',
-            'callback' => [$this, 'fetch_veeraj_data'],
-        ]);
     }
     
 
@@ -160,6 +176,59 @@ class Main {
             // Return cached data
             wp_send_json_success( $cached_data );
         }
+    }
+
+    /**
+     * Render callback for the Veeraj Table Block.
+     *
+     * @param array $attributes Block attributes.
+     * @return string HTML content of the table block.
+     */
+    public function render_table_block( $attributes ) {
+        // Get the visibility settings for columns.
+        $visible_columns = $attributes['visibleColumns'] ?? [
+            'id'    => true,
+            'fname' => true,
+            'lname' => true,
+            'email' => true,
+            'date'  => true,
+        ];
+
+        // Fetch cached data.
+        $cached_data = get_transient( 'veeraj_api_data' );
+        if ( false === $cached_data ) {
+            return '<p>' . esc_html__( 'Data is currently unavailable.', 'veeraj-plugin' ) . '</p>';
+        }
+
+        // Start building the table HTML.
+        ob_start();
+        ?>
+        <div class="veeraj-table-wrapper">
+            <table class="veeraj-table">
+                <thead>
+                    <tr>
+                        <?php if ( $visible_columns['id'] ) : ?><th><?php esc_html_e( 'ID', 'veeraj-plugin' ); ?></th><?php endif; ?>
+                        <?php if ( $visible_columns['fname'] ) : ?><th><?php esc_html_e( 'First Name', 'veeraj-plugin' ); ?></th><?php endif; ?>
+                        <?php if ( $visible_columns['lname'] ) : ?><th><?php esc_html_e( 'Last Name', 'veeraj-plugin' ); ?></th><?php endif; ?>
+                        <?php if ( $visible_columns['email'] ) : ?><th><?php esc_html_e( 'Email', 'veeraj-plugin' ); ?></th><?php endif; ?>
+                        <?php if ( $visible_columns['date'] ) : ?><th><?php esc_html_e( 'Date', 'veeraj-plugin' ); ?></th><?php endif; ?>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ( $cached_data['data']['rows'] as $row ) : ?>
+                        <tr>
+                            <?php if ( $visible_columns['id'] ) : ?><td><?php echo esc_html( $row['id'] ); ?></td><?php endif; ?>
+                            <?php if ( $visible_columns['fname'] ) : ?><td><?php echo esc_html( $row['fname'] ); ?></td><?php endif; ?>
+                            <?php if ( $visible_columns['lname'] ) : ?><td><?php echo esc_html( $row['lname'] ); ?></td><?php endif; ?>
+                            <?php if ( $visible_columns['email'] ) : ?><td><?php echo esc_html( $row['email'] ); ?></td><?php endif; ?>
+                            <?php if ( $visible_columns['date'] ) : ?><td><?php echo esc_html( date( 'Y-m-d H:i:s', $row['date'] ) ); ?></td><?php endif; ?>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
+        <?php
+        return ob_get_clean();
     }
 
 }
