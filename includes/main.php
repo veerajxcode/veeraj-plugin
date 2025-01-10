@@ -48,6 +48,9 @@ class Main {
         // AJAX endpoints.
         add_action( 'wp_ajax_get_veeraj_data', [ $this, 'fetch_veeraj_data' ] ); // For logged-in users
         add_action( 'wp_ajax_nopriv_get_veeraj_data', [ $this, 'fetch_veeraj_data' ] ); // For non-logged-in users
+
+        add_action( 'enqueue_block_editor_assets', [ $this, 'enqueue_block_assets' ] );
+        //add_action('rest_api_init', [$this, 'register_routes']);
     }
 
     /**
@@ -60,6 +63,34 @@ class Main {
             basename( VEERAJ_PLUGIN_DIR ) . '/languages'
         );
     }
+
+    public function enqueue_block_assets() {
+        wp_enqueue_script(
+            'veeraj-block-script',
+            VEERAJ_PLUGIN_URL .'assets/js/dist/block.bundle.js',
+            array( 'wp-blocks', 'wp-element', 'wp-editor', 'wp-components', 'wp-i18n' ), // Dependencies
+            VEERAJ_PLUGIN_VERSION,
+            true
+        );
+
+        wp_localize_script(
+            'veeraj-block-script',
+            'veeraj_ajax',
+            [
+                'ajax_url' => admin_url( 'admin-ajax.php' ),
+            ]
+        );
+
+    }
+
+    public function register_routes()
+    {
+        register_rest_route('veeraj/v1', '/data', [
+            'methods' => 'GET',
+            'callback' => [$this, 'fetch_veeraj_data'],
+        ]);
+    }
+    
 
    /**
      * Fetch data from the remote API and store it in a transient.

@@ -1,8 +1,10 @@
 const path = require('path');
+const DependencyExtractionWebpackPlugin = require('@wordpress/dependency-extraction-webpack-plugin');
 
 module.exports = {
   entry: {
     admin: './assets/js/admin-script.js', // Admin script
+    'block': './assets/js/gutenberg-block/table.js', // Entry file for the block
   },
   output: {
     filename: '[name].bundle.js', // Dynamically name bundles based on the entry key
@@ -16,15 +18,15 @@ module.exports = {
         use: {
           loader: 'babel-loader',
           options: {
-            presets: ['@babel/preset-env', '@babel/preset-react'],
+            presets: ['@wordpress/babel-preset-default'],
           },
         },
       },
     ],
   },
-  devtool: 'source-map', // Generate source maps for debugging
-  devServer: {
-    static: './assets/js/dist', // Serve files from the output directory
-    hot: true, // Enable hot module replacement
-  },
+  plugins: [
+    new DependencyExtractionWebpackPlugin(), // Extract dependencies for WordPress enqueue
+  ],
+  mode: 'development', // Use 'production' for minified files in production
+  devtool: 'source-map', // Enable source maps for easier debugging
 };
