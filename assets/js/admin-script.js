@@ -1,3 +1,6 @@
+
+import '../css/admin-style.css'; // Import the CSS file for the admin page
+
 jQuery(document).ready(function ($) {
     // Trigger to fetch the data
     $('#refresh-data-button').on('click', function () {
