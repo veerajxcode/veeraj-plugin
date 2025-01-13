@@ -112,69 +112,44 @@ class Main {
      * Fetch data from the remote API and store it in a transient.
      */
     public function fetch_veeraj_data() {
-        // Get the current timestamp
+        $force_refresh = isset( $_POST['force_refresh'] ) && $_POST['force_refresh'] === 'true'; // Check if force refresh is requested.
         $current_time = current_time( 'mysql' );
-
-        // Check if the next refresh time is already set
         $next_refresh_time = get_option( 'veeraj_next_refresh_time' );
-
-        // If the next refresh time isn't set or has passed, calculate and set it
-        if ( empty( $next_refresh_time ) || strtotime( $current_time ) > strtotime( $next_refresh_time ) ) {
-            // Calculate the next refresh time (5 minutes from now)
+    
+        // If force refresh or next refresh time has passed, fetch fresh data.
+        if ( $force_refresh || empty( $next_refresh_time ) || strtotime( $current_time ) > strtotime( $next_refresh_time ) ) {
             $next_refresh_time = date( 'Y-m-d H:i:s', strtotime( '+5 minutes', strtotime( $current_time ) ) );
-
-            // Store the next refresh time in an option
             update_option( 'veeraj_next_refresh_time', $next_refresh_time );
-
-            // Log the next refresh time
-            veeraj_debug_log( "Next refresh time is set to: $next_refresh_time" );
-        }
-
-        // Check if data is already cached
-        $cached_data = get_transient( 'veeraj_api_data' );
-
-        if ( false === $cached_data ) {
-            // Fetch fresh data from the API
+    
             $response = wp_remote_get( 'https://miusage.com/v1/challenge/1/' );
-
+    
             if ( is_wp_error( $response ) ) {
-                // Log and return an error if the API request fails
-                $error_message = $response->get_error_message();
-                veeraj_debug_log( "API fetch failed: $error_message" );
-                wp_send_json_error( [ 'error' => $error_message ], 500 );
+                wp_send_json_error( [ 'error' => $response->get_error_message() ], 500 );
             }
-
+    
             $response_code = wp_remote_retrieve_response_code( $response );
             $response_body = wp_remote_retrieve_body( $response );
-
+    
             if ( 200 === $response_code && ! empty( $response_body ) ) {
                 $data = json_decode( $response_body, true );
-
+    
                 if ( json_last_error() === JSON_ERROR_NONE ) {
-                    // Cache the data for 5 minutes
                     set_transient( 'veeraj_api_data', $data, 5 * MINUTE_IN_SECONDS );
-
-                    // Log the data fetch and next refresh time
-                    veeraj_debug_log( "Data fetched at $current_time. Next data fetch will occur at $next_refresh_time." );
-
-                    // Return the fetched data
                     wp_send_json_success( $data );
                 } else {
-                    // Handle JSON decoding errors
-                    veeraj_debug_log( "JSON decoding error: " . json_last_error_msg() );
-                    wp_send_json_error( [ 'error' => 'Failed to decode API response.' ], 500 );
+                    wp_send_json_error( [ 'error' => 'JSON decoding error.' ], 500 );
                 }
             } else {
-                // Handle non-200 responses or empty response bodies
-                veeraj_debug_log( "API responded with code $response_code or empty body." );
-                wp_send_json_error( [ 'error' => 'API fetch failed.' ], 500 );
+                wp_send_json_error( [ 'error' => 'API response error.' ], 500 );
             }
-        } else {
-            // Log that data is fetched from cache
-            veeraj_debug_log( "Data fetched from cache at $current_time. Fresh data will fetch after $next_refresh_time." );
-
-            // Return cached data
+        }
+    
+        // If not a force refresh and cache exists, return cached data.
+        $cached_data = get_transient( 'veeraj_api_data' );
+        if ( $cached_data ) {
             wp_send_json_success( $cached_data );
+        } else {
+            wp_send_json_error( [ 'error' => 'No cached data available.' ], 500 );
         }
     }
 

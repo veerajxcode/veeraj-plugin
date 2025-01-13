@@ -1,39 +1,28 @@
-
-import '../css/admin-style.css'; // Import the CSS file for the admin page
-
 jQuery(document).ready(function ($) {
-    // Trigger to fetch the data
-    $('#refresh-data-button').on('click', function () {
-        // Add loading state
+    const fetchData = (forceRefresh = false) => {
         $('#data-container').html('<p>Loading...</p>');
 
         $.ajax({
             url: veerajPluginData.ajaxurl,
-            method: 'POST',  // POST method should be used for AJAX actions in WordPress
+            method: 'POST',
             data: {
-                action: 'get_veeraj_data',  // AJAX action
+                action: 'get_veeraj_data',
+                force_refresh: forceRefresh ? 'true' : 'false',
             },
             success: function (response) {
                 if (response.success) {
-                    console.log('Fetched data:', response.data);
-
-                    const tableData = response.data.data; // Extract the main data object
+                    const tableData = response.data.data;
 
                     if (tableData) {
-                        // Clear the existing content
                         $('#data-container').empty();
-
-                        // Create a table element
                         const table = $('<table>').addClass('veeraj-table');
                         const thead = $('<thead>');
                         const tbody = $('<tbody>');
 
-                        // Add the table title
                         if (response.data.title) {
                             $('#data-container').append(`<h3>${response.data.title}</h3>`);
                         }
 
-                        // Render table headers
                         if (Array.isArray(tableData.headers)) {
                             const headerRow = $('<tr>');
                             tableData.headers.forEach(header => {
@@ -42,7 +31,6 @@ jQuery(document).ready(function ($) {
                             thead.append(headerRow);
                         }
 
-                        // Render table rows
                         const rows = tableData.rows;
                         if (rows && typeof rows === 'object') {
                             Object.keys(rows).forEach(key => {
@@ -52,19 +40,18 @@ jQuery(document).ready(function ($) {
                                 tableRow.append(`<td>${row.fname}</td>`);
                                 tableRow.append(`<td>${row.lname}</td>`);
                                 tableRow.append(`<td>${row.email}</td>`);
-                                tableRow.append(`<td>${new Date(row.date * 1000).toLocaleDateString()}</td>`); // Format the date
+                                tableRow.append(`<td>${new Date(row.date * 1000).toLocaleDateString()}</td>`);
                                 tbody.append(tableRow);
                             });
                         }
 
-                        // Append the table sections and add to the container
                         table.append(thead).append(tbody);
                         $('#data-container').append(table);
                     } else {
                         $('#data-container').html('<p>No data available to display.</p>');
                     }
                 } else {
-                    $('#data-container').html(`<p>Error fetching data: ${response.data.message}</p>`);
+                    $('#data-container').html(`<p>Error fetching data: ${response.data.message || 'Unknown error'}</p>`);
                 }
             },
             error: function () {
@@ -72,5 +59,13 @@ jQuery(document).ready(function ($) {
                 console.error('AJAX request failed.');
             }
         });
+    };
+
+    // Fetch data on page load
+    fetchData();
+
+    // Trigger force refresh on button click
+    $('#refresh-data-button').on('click', function () {
+        fetchData(true);
     });
 });
