@@ -1,3 +1,4 @@
+import '../css/admin-style.css'; // Import the CSS file for the admin page
 jQuery(document).ready(function ($) {
     const fetchData = (forceRefresh = false) => {
         $('#data-container').html('<p>Loading...</p>');

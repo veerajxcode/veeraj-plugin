@@ -75,7 +75,7 @@ class Main {
         if ( ! is_admin() ) {
             wp_enqueue_script(
                 'veeraj-frontend-script',
-                VEERAJ_PLUGIN_URL . 'assets/js/dist/table-frontend.bundle.js',
+                VEERAJ_PLUGIN_URL . 'assets/build/js/frontend.bundle.js',
                 [],
                 VEERAJ_PLUGIN_VERSION,
                 true
@@ -91,7 +91,7 @@ class Main {
 
         wp_enqueue_script(
             'veeraj-block-script',
-            VEERAJ_PLUGIN_URL .'assets/js/dist/block.bundle.js',
+            VEERAJ_PLUGIN_URL .'assets/build/js/table.bundle.js',
             array( 'wp-blocks', 'wp-element', 'wp-editor', 'wp-components', 'wp-i18n' ), // Dependencies
             VEERAJ_PLUGIN_VERSION,
             true
@@ -113,18 +113,26 @@ class Main {
      */
     public function fetch_veeraj_data() {
         $force_refresh = isset( $_POST['force_refresh'] ) && $_POST['force_refresh'] === 'true'; // Check if force refresh is requested.
+        veeraj_debug_log( 'Force refresh: ' . ( $force_refresh ? 'true' : 'false' ) );
+    
         $current_time = current_time( 'mysql' );
+    
         $next_refresh_time = get_option( 'veeraj_next_refresh_time' );
     
         // If force refresh or next refresh time has passed, fetch fresh data.
         if ( $force_refresh || empty( $next_refresh_time ) || strtotime( $current_time ) > strtotime( $next_refresh_time ) ) {
+            veeraj_debug_log( 'Fetching fresh data from API.' );
+    
             $next_refresh_time = date( 'Y-m-d H:i:s', strtotime( '+5 minutes', strtotime( $current_time ) ) );
             update_option( 'veeraj_next_refresh_time', $next_refresh_time );
+            veeraj_debug_log( 'Updated next refresh time: ' . $next_refresh_time );
     
             $response = wp_remote_get( 'https://miusage.com/v1/challenge/1/' );
     
             if ( is_wp_error( $response ) ) {
-                wp_send_json_error( [ 'error' => $response->get_error_message() ], 500 );
+                $error_message = $response->get_error_message();
+                veeraj_debug_log( 'API request error: ' . $error_message );
+                wp_send_json_error( [ 'error' => $error_message ], 500 );
             }
     
             $response_code = wp_remote_retrieve_response_code( $response );
@@ -135,11 +143,15 @@ class Main {
     
                 if ( json_last_error() === JSON_ERROR_NONE ) {
                     set_transient( 'veeraj_api_data', $data, 5 * MINUTE_IN_SECONDS );
+                    veeraj_debug_log( 'Data cached successfully.' );
                     wp_send_json_success( $data );
                 } else {
+                    $json_error = json_last_error_msg();
+                    veeraj_debug_log( 'JSON decoding error: ' . $json_error );
                     wp_send_json_error( [ 'error' => 'JSON decoding error.' ], 500 );
                 }
             } else {
+                veeraj_debug_log( 'API response error or empty body.' );
                 wp_send_json_error( [ 'error' => 'API response error.' ], 500 );
             }
         }
@@ -147,8 +159,10 @@ class Main {
         // If not a force refresh and cache exists, return cached data.
         $cached_data = get_transient( 'veeraj_api_data' );
         if ( $cached_data ) {
+            veeraj_debug_log( 'Returning cached data.' );
             wp_send_json_success( $cached_data );
         } else {
+            veeraj_debug_log( 'No cached data available.' );
             wp_send_json_error( [ 'error' => 'No cached data available.' ], 500 );
         }
     }

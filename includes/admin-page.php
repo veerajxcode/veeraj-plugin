@@ -73,14 +73,14 @@ class AdminPage {
 
         wp_enqueue_style(
             'veeraj-plugin-admin-style',
-            VEERAJ_PLUGIN_URL . 'assets/css/admin-style.css',
+            VEERAJ_PLUGIN_URL . 'assets/build/css/admin.bundle.css',
             [],
             VEERAJ_PLUGIN_VERSION
         );
 
         wp_enqueue_script(
             'veeraj-plugin-admin-script',
-            VEERAJ_PLUGIN_URL . 'assets/js/admin-script.js',
+            VEERAJ_PLUGIN_URL . 'assets/build/js/admin.bundle.js',
             [ 'jquery' ],
             VEERAJ_PLUGIN_VERSION,
             true
