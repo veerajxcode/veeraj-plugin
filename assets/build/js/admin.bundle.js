@@ -104,6 +104,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _css_admin_style_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../css/admin-style.css */ "./assets/css/admin-style.css");
 
  // Import the CSS file for the admin page
+
 jQuery(document).ready(function ($) {
   var fetchData = function fetchData() {
     var forceRefresh = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
@@ -113,6 +114,7 @@ jQuery(document).ready(function ($) {
       method: 'POST',
       data: {
         action: 'get_veeraj_data',
+        nonce: veerajPluginData.nonce,
         force_refresh: forceRefresh ? 'true' : 'false'
       },
       success: function success(response) {

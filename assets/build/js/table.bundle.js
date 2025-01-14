@@ -422,14 +422,14 @@ function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t =
     (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_5__.useEffect)(function () {
       // Fetch data from the AJAX endpoint
       setLoading(true);
-      fetch(veeraj_ajax.ajax_url, {
+      fetch(veerajPluginData.ajaxurl, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded'
         },
         body: new URLSearchParams({
           action: 'get_veeraj_data',
-          nonce: veeraj_ajax.nonce
+          nonce: veerajPluginData.nonce
         })
       }).then(function (response) {
         return response.json();

@@ -40,6 +40,9 @@ if ( file_exists( VEERAJ_PLUGIN_DIR . 'vendor/autoload.php' ) ) {
     veeraj_debug_log( 'Composer autoload file not found at ' . VEERAJ_PLUGIN_DIR . 'vendor/autoload.php' );
 }
 
+// Load common scripts.
+require_once VEERAJ_PLUGIN_DIR . 'includes/common-scripts.php';
+
 // Check if WP-CLI is available.
 if ( defined( 'WP_CLI' ) && WP_CLI ) {
     require_once VEERAJ_PLUGIN_DIR . 'includes/wp-cli.php'; // Include WP-CLI commands file.

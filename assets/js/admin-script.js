@@ -1,4 +1,5 @@
 import '../css/admin-style.css'; // Import the CSS file for the admin page
+
 jQuery(document).ready(function ($) {
     const fetchData = (forceRefresh = false) => {
         $('#data-container').html('<p>Loading...</p>');
@@ -8,6 +9,7 @@ jQuery(document).ready(function ($) {
             method: 'POST',
             data: {
                 action: 'get_veeraj_data',
+                nonce:   veerajPluginData.nonce,
                 force_refresh: forceRefresh ? 'true' : 'false',
             },
             success: function (response) {

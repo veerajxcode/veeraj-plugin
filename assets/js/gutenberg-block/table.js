@@ -30,14 +30,14 @@ registerBlockType('veeraj/table-block', {
         useEffect(() => {
             // Fetch data from the AJAX endpoint
             setLoading(true);
-            fetch(veeraj_ajax.ajax_url, {
+            fetch(veerajPluginData.ajaxurl, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded'
                 },
                 body: new URLSearchParams({
                     action: 'get_veeraj_data',
-                    nonce: veeraj_ajax.nonce,
+                    nonce:   veerajPluginData.nonce,
                 }),
             })
                 .then((response) => response.json())
