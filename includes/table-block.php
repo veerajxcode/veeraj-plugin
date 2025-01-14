@@ -22,23 +22,6 @@ class TableBlock {
      * Enqueue assets for the block editor.
      */
     public function enqueue_block_assets() {
-        if ( ! is_admin() ) {
-            wp_enqueue_script(
-                'veeraj-frontend-script',
-                VEERAJ_PLUGIN_URL . 'assets/build/js/frontend.bundle.js',
-                [],
-                VEERAJ_PLUGIN_VERSION,
-                true
-            );
-
-            wp_enqueue_style(
-                'veeraj-frontend-style',
-                VEERAJ_PLUGIN_URL . 'assets/css/gutenberg-block/frontend-style.css',
-                [],
-                VEERAJ_PLUGIN_VERSION
-            );
-        }
-
         wp_enqueue_script(
             'veeraj-block-script',
             VEERAJ_PLUGIN_URL . 'assets/build/js/table.bundle.js',

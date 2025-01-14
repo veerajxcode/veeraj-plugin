@@ -4,7 +4,7 @@ import { PanelBody, CheckboxControl } from '@wordpress/components';
 import { useState, useEffect } from '@wordpress/element';
 
 registerBlockType('veeraj/table-block', {
-    title: 'Veeraj Table Block',
+    title: veerajPluginData.translations.tableBlockTitle,
     category: 'widgets',
     icon: 'table-col-after',
     attributes: {
@@ -69,7 +69,7 @@ registerBlockType('veeraj/table-block', {
                     if (result.success) {
                         setAttributes({ data: result.data });
                     } else {
-                        setError(result.data?.error || 'Unknown error');
+                        setError(result.data?.error || veerajPluginData.translations.unknownError);
                     }
                 })
                 .catch((err) => {
@@ -81,11 +81,11 @@ registerBlockType('veeraj/table-block', {
         }, [data, setAttributes]); // Run effect only if `data` is not available
     
         if (loading) {
-            return <p {...blockProps}>Loading...</p>;
+            return <p {...blockProps}>{veerajPluginData.translations.loadingMessage}</p>;
         }
     
         if (error) {
-            return <p {...blockProps}>Error: {error}</p>;
+            return <p {...blockProps}>{veerajPluginData.translations.errorMessage}: {escapeHTML(error)}</p>;
         }
     
         return (
@@ -112,11 +112,11 @@ registerBlockType('veeraj/table-block', {
                 <table>
                     <thead>
                         <tr>
-                            {visibleColumns.id && <th>ID</th>}
-                            {visibleColumns.fname && <th>First Name</th>}
-                            {visibleColumns.lname && <th>Last Name</th>}
-                            {visibleColumns.email && <th>Email</th>}
-                            {visibleColumns.date && <th>Date</th>}
+                            {visibleColumns.id && <th>{veerajPluginData.translations.id}</th>}
+                            {visibleColumns.fname && <th>{veerajPluginData.translations.firstName}</th>}
+                            {visibleColumns.lname && <th>{veerajPluginData.translations.lastName}</th>}
+                            {visibleColumns.email && <th>{veerajPluginData.translations.email}</th>}
+                            {visibleColumns.date && <th>{veerajPluginData.translations.date}</th>}
                         </tr>
                     </thead>
                     <tbody>
@@ -143,7 +143,7 @@ registerBlockType('veeraj/table-block', {
 
         // No data to render if no visible columns or data
         if (!data || !Object.values(visibleColumns).includes(true)) {
-            return <p>No data available</p>;
+            return <p>{veerajPluginData.translations.noDataMessage}</p>;
         }
 
         return (
@@ -152,11 +152,11 @@ registerBlockType('veeraj/table-block', {
                     <table className="veeraj-table">
                         <thead>
                             <tr>
-                                {visibleColumns.id && <th>ID</th>}
-                                {visibleColumns.fname && <th>First Name</th>}
-                                {visibleColumns.lname && <th>Last Name</th>}
-                                {visibleColumns.email && <th>Email</th>}
-                                {visibleColumns.date && <th>Date</th>}
+                                {visibleColumns.id && <th>{veerajPluginData.translations.id}</th>}
+                                {visibleColumns.fname && <th>{veerajPluginData.translations.firstName}</th>}
+                                {visibleColumns.lname && <th>{veerajPluginData.translations.lastName}</th>}
+                                {visibleColumns.email && <th>{veerajPluginData.translations.email}</th>}
+                                {visibleColumns.date && <th>{veerajPluginData.translations.date}</th>}
                             </tr>
                         </thead>
                         <tbody>

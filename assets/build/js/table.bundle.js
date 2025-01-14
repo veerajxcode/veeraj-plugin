@@ -386,7 +386,7 @@ function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t =
 
 
 (0,_wordpress_blocks__WEBPACK_IMPORTED_MODULE_2__.registerBlockType)('veeraj/table-block', {
-  title: 'Veeraj Table Block',
+  title: veerajPluginData.translations.tableBlockTitle,
   category: 'widgets',
   icon: 'table-col-after',
   attributes: {
@@ -461,7 +461,7 @@ function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t =
           });
         } else {
           var _result$data;
-          setError(((_result$data = result.data) === null || _result$data === void 0 ? void 0 : _result$data.error) || 'Unknown error');
+          setError(((_result$data = result.data) === null || _result$data === void 0 ? void 0 : _result$data.error) || veerajPluginData.translations.unknownError);
         }
       })["catch"](function (err) {
         setError(err.message);
@@ -472,12 +472,12 @@ function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t =
 
     if (loading) {
       return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("p", _objectSpread(_objectSpread({}, blockProps), {}, {
-        children: "Loading..."
+        children: veerajPluginData.translations.loadingMessage
       }));
     }
     if (error) {
       return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("p", _objectSpread(_objectSpread({}, blockProps), {}, {
-        children: ["Error: ", error]
+        children: [veerajPluginData.translations.errorMessage, ": ", escapeHTML(error)]
       }));
     }
     return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", _objectSpread(_objectSpread({}, blockProps), {}, {
@@ -501,15 +501,15 @@ function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t =
         children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("thead", {
           children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("tr", {
             children: [visibleColumns.id && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("th", {
-              children: "ID"
+              children: veerajPluginData.translations.id
             }), visibleColumns.fname && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("th", {
-              children: "First Name"
+              children: veerajPluginData.translations.firstName
             }), visibleColumns.lname && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("th", {
-              children: "Last Name"
+              children: veerajPluginData.translations.lastName
             }), visibleColumns.email && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("th", {
-              children: "Email"
+              children: veerajPluginData.translations.email
             }), visibleColumns.date && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("th", {
-              children: "Date"
+              children: veerajPluginData.translations.date
             })]
           })
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("tbody", {
@@ -542,7 +542,7 @@ function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t =
     // No data to render if no visible columns or data
     if (!data || !Object.values(visibleColumns).includes(true)) {
       return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("p", {
-        children: "No data available"
+        children: veerajPluginData.translations.noDataMessage
       });
     }
     return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", _objectSpread(_objectSpread({}, _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_3__.useBlockProps.save()), {}, {
@@ -553,15 +553,15 @@ function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t =
           children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("thead", {
             children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("tr", {
               children: [visibleColumns.id && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("th", {
-                children: "ID"
+                children: veerajPluginData.translations.id
               }), visibleColumns.fname && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("th", {
-                children: "First Name"
+                children: veerajPluginData.translations.firstName
               }), visibleColumns.lname && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("th", {
-                children: "Last Name"
+                children: veerajPluginData.translations.lastName
               }), visibleColumns.email && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("th", {
-                children: "Email"
+                children: veerajPluginData.translations.email
               }), visibleColumns.date && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("th", {
-                children: "Date"
+                children: veerajPluginData.translations.date
               })]
             })
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("tbody", {
