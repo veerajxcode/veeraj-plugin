@@ -103,7 +103,7 @@ class Main {
                 $data = json_decode( $response_body, true );
     
                 if ( json_last_error() === JSON_ERROR_NONE ) {
-                    set_transient( 'veeraj_api_data', $data, 5 * MINUTE_IN_SECONDS );
+                    set_transient( 'veeraj_api_data', $data, 1 * HOUR_IN_SECONDS );
                     veeraj_debug_log( 'Data cached successfully.' );
                     wp_send_json_success( $data );
                 } else {
