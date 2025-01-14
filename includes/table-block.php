@@ -16,8 +16,6 @@ class TableBlock {
         // Enqueue block editor assets.
         add_action( 'enqueue_block_editor_assets', [ $this, 'enqueue_block_assets' ] );
 
-        // Register block with dynamic rendering.
-        add_action( 'init', [ $this, 'register_block_type' ] );
     }
 
     /**
@@ -52,14 +50,6 @@ class TableBlock {
         veeraj_localize_script('veeraj-block-script');
     }
 
-    /**
-     * Register the block with dynamic rendering.
-     */
-    public function register_block_type() {
-        register_block_type( 'veeraj/table-block', [
-            'render_callback' => [ $this, 'render_table_block' ],
-        ] );
-    }
 
     /**
      * Render callback for the Veeraj Table Block.

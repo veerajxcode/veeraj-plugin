@@ -399,28 +399,40 @@ function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t =
         email: true,
         date: true
       }
+    },
+    data: {
+      type: 'object',
+      "default": null
     }
   },
+  // edit function for the block editor
   edit: function edit(props) {
     var _data$data;
     var attributes = props.attributes,
       setAttributes = props.setAttributes;
-    var visibleColumns = attributes.visibleColumns;
+    var visibleColumns = attributes.visibleColumns,
+      data = attributes.data;
     var blockProps = (0,_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_3__.useBlockProps)();
-    var _useState = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_5__.useState)(null),
+    var _useState = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_5__.useState)(false),
       _useState2 = (0,_babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_1__["default"])(_useState, 2),
-      data = _useState2[0],
-      setData = _useState2[1];
-    var _useState3 = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_5__.useState)(true),
+      loading = _useState2[0],
+      setLoading = _useState2[1];
+    var _useState3 = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_5__.useState)(null),
       _useState4 = (0,_babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_1__["default"])(_useState3, 2),
-      loading = _useState4[0],
-      setLoading = _useState4[1];
-    var _useState5 = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_5__.useState)(null),
-      _useState6 = (0,_babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_1__["default"])(_useState5, 2),
-      error = _useState6[0],
-      setError = _useState6[1];
+      error = _useState4[0],
+      setError = _useState4[1];
+
+    // Function to capitalize the first letter of each word
+    var capitalizeFirstLetter = function capitalizeFirstLetter(string) {
+      return string.charAt(0).toUpperCase() + string.slice(1);
+    };
     (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_5__.useEffect)(function () {
-      // Fetch data from the AJAX endpoint
+      // If data is already loaded in the block, don't fetch it again
+      if (data) {
+        return; // Skip fetching if data is already present
+      }
+
+      // Fetch data from the AJAX endpoint if no data is already available
       setLoading(true);
       fetch(veerajPluginData.ajaxurl, {
         method: 'POST',
@@ -435,7 +447,9 @@ function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t =
         return response.json();
       }).then(function (result) {
         if (result.success) {
-          setData(result.data);
+          setAttributes({
+            data: result.data
+          });
         } else {
           var _result$data;
           setError(((_result$data = result.data) === null || _result$data === void 0 ? void 0 : _result$data.error) || 'Unknown error');
@@ -445,7 +459,8 @@ function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t =
       })["finally"](function () {
         setLoading(false);
       });
-    }, []);
+    }, [data, setAttributes]); // Run effect only if `data` is not available
+
     if (loading) {
       return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("p", _objectSpread(_objectSpread({}, blockProps), {}, {
         children: "Loading..."
@@ -462,7 +477,8 @@ function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t =
           title: "Column Visibility",
           children: Object.keys(visibleColumns).map(function (column) {
             return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__.CheckboxControl, {
-              label: "Show ".concat(column),
+              label: "Show ".concat(capitalizeFirstLetter(column)) // Capitalize first letter
+              ,
               checked: visibleColumns[column],
               onChange: function onChange(value) {
                 return setAttributes({
@@ -507,9 +523,59 @@ function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t =
       })]
     }));
   },
-  save: function save() {
-    return null;
-  } // Save function is unnecessary for dynamic blocks.
+  // save function for saving data and rendering it on the frontend
+  save: function save(props) {
+    var _data$data2;
+    var attributes = props.attributes;
+    var visibleColumns = attributes.visibleColumns,
+      data = attributes.data;
+
+    // No data to render if no visible columns or data
+    if (!data || !Object.values(visibleColumns).includes(true)) {
+      return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("p", {
+        children: "No data available"
+      });
+    }
+    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", _objectSpread(_objectSpread({}, _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_3__.useBlockProps.save()), {}, {
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
+        className: "veeraj-table-wrapper",
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("table", {
+          className: "veeraj-table",
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("thead", {
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("tr", {
+              children: [visibleColumns.id && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("th", {
+                children: "ID"
+              }), visibleColumns.fname && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("th", {
+                children: "First Name"
+              }), visibleColumns.lname && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("th", {
+                children: "Last Name"
+              }), visibleColumns.email && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("th", {
+                children: "Email"
+              }), visibleColumns.date && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("th", {
+                children: "Date"
+              })]
+            })
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("tbody", {
+            children: Object.values((data === null || data === void 0 || (_data$data2 = data.data) === null || _data$data2 === void 0 ? void 0 : _data$data2.rows) || {}).map(function (row) {
+              return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("tr", {
+                children: [visibleColumns.id && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("td", {
+                  children: row.id
+                }), visibleColumns.fname && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("td", {
+                  children: row.fname
+                }), visibleColumns.lname && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("td", {
+                  children: row.lname
+                }), visibleColumns.email && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("td", {
+                  children: row.email
+                }), visibleColumns.date && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("td", {
+                  children: new Date(row.date * 1000).toLocaleString()
+                })]
+              }, row.id);
+            })
+          })]
+        })
+      })
+    }));
+  }
 });
 })();
 

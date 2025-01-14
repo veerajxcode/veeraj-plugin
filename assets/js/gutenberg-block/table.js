@@ -18,17 +18,32 @@ registerBlockType('veeraj/table-block', {
                 date: true,
             },
         },
+        data: {
+            type: 'object',
+            default: null,
+        },
     },
+
+    // edit function for the block editor
     edit: (props) => {
         const { attributes, setAttributes } = props;
-        const { visibleColumns } = attributes;
+        const { visibleColumns, data } = attributes;
         const blockProps = useBlockProps();
-        const [data, setData] = useState(null);
-        const [loading, setLoading] = useState(true);
+        const [loading, setLoading] = useState(false);
         const [error, setError] = useState(null);
 
+        // Function to capitalize the first letter of each word
+        const capitalizeFirstLetter = (string) => {
+            return string.charAt(0).toUpperCase() + string.slice(1);
+        };
+    
         useEffect(() => {
-            // Fetch data from the AJAX endpoint
+            // If data is already loaded in the block, don't fetch it again
+            if (data) {
+                return; // Skip fetching if data is already present
+            }
+    
+            // Fetch data from the AJAX endpoint if no data is already available
             setLoading(true);
             fetch(veerajPluginData.ajaxurl, {
                 method: 'POST',
@@ -37,13 +52,13 @@ registerBlockType('veeraj/table-block', {
                 },
                 body: new URLSearchParams({
                     action: 'get_veeraj_data',
-                    nonce:   veerajPluginData.nonce,
+                    nonce: veerajPluginData.nonce,
                 }),
             })
                 .then((response) => response.json())
                 .then((result) => {
                     if (result.success) {
-                        setData(result.data);
+                        setAttributes({ data: result.data });
                     } else {
                         setError(result.data?.error || 'Unknown error');
                     }
@@ -54,16 +69,16 @@ registerBlockType('veeraj/table-block', {
                 .finally(() => {
                     setLoading(false);
                 });
-        }, []);
-
+        }, [data, setAttributes]); // Run effect only if `data` is not available
+    
         if (loading) {
             return <p {...blockProps}>Loading...</p>;
         }
-
+    
         if (error) {
             return <p {...blockProps}>Error: {error}</p>;
         }
-
+    
         return (
             <div {...blockProps}>
                 <InspectorControls>
@@ -71,7 +86,7 @@ registerBlockType('veeraj/table-block', {
                         {Object.keys(visibleColumns).map((column) => (
                             <CheckboxControl
                                 key={column}
-                                label={`Show ${column}`}
+                                label={`Show ${capitalizeFirstLetter(column)}`}  // Capitalize first letter
                                 checked={visibleColumns[column]}
                                 onChange={(value) =>
                                     setAttributes({
@@ -112,5 +127,47 @@ registerBlockType('veeraj/table-block', {
             </div>
         );
     },
-    save: () => null, // Save function is unnecessary for dynamic blocks.
+    
+
+    // save function for saving data and rendering it on the frontend
+    save: (props) => {
+        const { attributes } = props;
+        const { visibleColumns, data } = attributes;
+
+        // No data to render if no visible columns or data
+        if (!data || !Object.values(visibleColumns).includes(true)) {
+            return <p>No data available</p>;
+        }
+
+        return (
+            <div {...useBlockProps.save()}>
+                <div className="veeraj-table-wrapper">
+                    <table className="veeraj-table">
+                        <thead>
+                            <tr>
+                                {visibleColumns.id && <th>ID</th>}
+                                {visibleColumns.fname && <th>First Name</th>}
+                                {visibleColumns.lname && <th>Last Name</th>}
+                                {visibleColumns.email && <th>Email</th>}
+                                {visibleColumns.date && <th>Date</th>}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {Object.values(data?.data?.rows || {}).map((row) => (
+                                <tr key={row.id}>
+                                    {visibleColumns.id && <td>{row.id}</td>}
+                                    {visibleColumns.fname && <td>{row.fname}</td>}
+                                    {visibleColumns.lname && <td>{row.lname}</td>}
+                                    {visibleColumns.email && <td>{row.email}</td>}
+                                    {visibleColumns.date && (
+                                        <td>{new Date(row.date * 1000).toLocaleString()}</td>
+                                    )}
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        );
+    },
 });
