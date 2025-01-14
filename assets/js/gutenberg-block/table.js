@@ -31,10 +31,19 @@ registerBlockType('veeraj/table-block', {
         const blockProps = useBlockProps();
         const [loading, setLoading] = useState(false);
         const [error, setError] = useState(null);
-
+    
         // Function to capitalize the first letter of each word
         const capitalizeFirstLetter = (string) => {
             return string.charAt(0).toUpperCase() + string.slice(1);
+        };
+    
+        // Column names map for full names
+        const columnNames = {
+            id: 'ID',
+            fname: 'First Name',
+            lname: 'Last Name',
+            email: 'Email',
+            date: 'Date'
         };
     
         useEffect(() => {
@@ -86,7 +95,7 @@ registerBlockType('veeraj/table-block', {
                         {Object.keys(visibleColumns).map((column) => (
                             <CheckboxControl
                                 key={column}
-                                label={`Show ${capitalizeFirstLetter(column)}`}  // Capitalize first letter
+                                label={`Show ${columnNames[column] || capitalizeFirstLetter(column)}`}  // Use full names or capitalize the first letter
                                 checked={visibleColumns[column]}
                                 onChange={(value) =>
                                     setAttributes({
@@ -127,8 +136,6 @@ registerBlockType('veeraj/table-block', {
             </div>
         );
     },
-    
-
     // save function for saving data and rendering it on the frontend
     save: (props) => {
         const { attributes } = props;

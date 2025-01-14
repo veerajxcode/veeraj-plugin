@@ -73,7 +73,7 @@ class Main {
      * Fetch data from the remote API and store it in a transient.
      */
     public function fetch_veeraj_data() {
-        $force_refresh = isset( $_POST['force_refresh'] ) && $_POST['force_refresh'] === 'true'; // Check if force refresh is requested.
+        $force_refresh = isset( $_POST['force_refresh'] ) && 'true' === sanitize_text_field( $_POST['force_refresh'] ); // Check if force refresh is requested.
         veeraj_debug_log( 'Force refresh: ' . ( $force_refresh ? 'true' : 'false' ) );
     
         $current_time = current_time( 'mysql' );
@@ -93,7 +93,7 @@ class Main {
             if ( is_wp_error( $response ) ) {
                 $error_message = $response->get_error_message();
                 veeraj_debug_log( 'API request error: ' . $error_message );
-                wp_send_json_error( [ 'error' => $error_message ], 500 );
+                wp_send_json_error( [ 'error' => __( $error_message , 'veeraj-plugin' ) ], 500 );
             }
     
             $response_code = wp_remote_retrieve_response_code( $response );
@@ -109,11 +109,11 @@ class Main {
                 } else {
                     $json_error = json_last_error_msg();
                     veeraj_debug_log( 'JSON decoding error: ' . $json_error );
-                    wp_send_json_error( [ 'error' => 'JSON decoding error.' ], 500 );
+                    wp_send_json_error( [ 'error' => __( 'API response error.', 'veeraj-plugin' ) ], 500 );
                 }
             } else {
                 veeraj_debug_log( 'API response error or empty body.' );
-                wp_send_json_error( [ 'error' => 'API response error.' ], 500 );
+                wp_send_json_error( [ 'error' => __( 'API response error.', 'veeraj-plugin' ) ], 500 );
             }
         }
     
@@ -124,7 +124,7 @@ class Main {
             wp_send_json_success( $cached_data );
         } else {
             veeraj_debug_log( 'No cached data available.' );
-            wp_send_json_error( [ 'error' => 'No cached data available.' ], 500 );
+            wp_send_json_error( [ 'error' => __('No cached data available.', 'veeraj-plugin' ) ], 500 );
         }
     }
 

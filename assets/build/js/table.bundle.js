@@ -426,6 +426,15 @@ function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t =
     var capitalizeFirstLetter = function capitalizeFirstLetter(string) {
       return string.charAt(0).toUpperCase() + string.slice(1);
     };
+
+    // Column names map for full names
+    var columnNames = {
+      id: 'ID',
+      fname: 'First Name',
+      lname: 'Last Name',
+      email: 'Email',
+      date: 'Date'
+    };
     (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_5__.useEffect)(function () {
       // If data is already loaded in the block, don't fetch it again
       if (data) {
@@ -477,7 +486,7 @@ function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t =
           title: "Column Visibility",
           children: Object.keys(visibleColumns).map(function (column) {
             return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__.CheckboxControl, {
-              label: "Show ".concat(capitalizeFirstLetter(column)) // Capitalize first letter
+              label: "Show ".concat(columnNames[column] || capitalizeFirstLetter(column)) // Use full names or capitalize the first letter
               ,
               checked: visibleColumns[column],
               onChange: function onChange(value) {

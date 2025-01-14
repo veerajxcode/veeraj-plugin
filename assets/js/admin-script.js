@@ -43,7 +43,7 @@ jQuery(document).ready(function ($) {
                                 tableRow.append(`<td>${row.fname}</td>`);
                                 tableRow.append(`<td>${row.lname}</td>`);
                                 tableRow.append(`<td>${row.email}</td>`);
-                                tableRow.append(`<td>${new Date(row.date * 1000).toLocaleDateString()}</td>`);
+                                tableRow.append(`<td>${new Date(row.date * 1000).toLocaleString()}</td>`);
                                 tbody.append(tableRow);
                             });
                         }

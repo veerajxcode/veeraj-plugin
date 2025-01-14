@@ -144,7 +144,7 @@ jQuery(document).ready(function ($) {
                 tableRow.append("<td>".concat(row.fname, "</td>"));
                 tableRow.append("<td>".concat(row.lname, "</td>"));
                 tableRow.append("<td>".concat(row.email, "</td>"));
-                tableRow.append("<td>".concat(new Date(row.date * 1000).toLocaleDateString(), "</td>"));
+                tableRow.append("<td>".concat(new Date(row.date * 1000).toLocaleString(), "</td>"));
                 tbody.append(tableRow);
               });
             }

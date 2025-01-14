@@ -178,11 +178,11 @@ p.desc.veeraj-plugin-text {
 /* Header styles */
 .veeraj-table thead th {
     background: #f4f6f9;
-    color: #333;
+    /*color: #333;*/
     padding: 10px 15px;
     border-bottom: 1px solid #ccd0d4;
-    text-transform: uppercase;
-    font-weight: 600;
+    /*text-transform: uppercase;
+    font-weight: 600;*/
 }
 
 /* Row styles */
