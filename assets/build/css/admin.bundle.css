@@ -208,5 +208,56 @@ p.desc.veeraj-plugin-text {
     background: #f4f8fc;
 }
 
+#veeraj-plugin-flyout {
+    position: fixed;
+    z-index: 99999;
+    transition: all .2s ease-in-out;
+    right: 40px;
+    bottom: 40px;
+    opacity: 1;
+}
+#veeraj-plugin-flyout .veeraj-plugin-flyout-item.veeraj-plugin-flyout-item-0 {
+    bottom: 75px;
+}
+#veeraj-plugin-flyout .veeraj-plugin-flyout-item {
+    position: absolute;
+    display: flex;
+    left: 10px;
+    width: 40px;
+    height: 40px;
+    opacity: 0;
+    visibility: hidden;
+    transition: all .2s ease-in-out;
+    transform: scale(0);
+    border-radius: 50%;
+    box-shadow: 0px 2px 10px rgba(0, 0, 0, .15);
+    background-color: #738e9e;
+}
+
+#veeraj-plugin-flyout .veeraj-plugin-flyout-head {
+    display: block;
+}
+#veeraj-plugin-flyout .veeraj-plugin-flyout-head .veeraj-plugin-flyout-label {
+    right: calc(100% + 15px);
+    opacity: 0;
+    transform: translateY(-50%) scale(0);
+    margin-right: -50px;
+}
+#veeraj-plugin-flyout .veeraj-plugin-flyout-head figure {
+    margin: 0;
+    border-radius: 50%;
+    border: 3px solid #e27730;
+    overflow: hidden;
+    box-shadow: 0 2px 20px rgba(0, 0, 0, .15);
+    background-color: #fff;
+    transition: all .2s ease-in-out;
+}
+#veeraj-plugin-flyout .veeraj-plugin-flyout-head figure img {
+    display: block;
+    width: 54px;
+    height: 54px;
+    transition: all .2s ease-in-out;
+}
+
 
 /*# sourceMappingURL=admin.bundle.css.map*/

@@ -33,6 +33,9 @@ class AdminPage {
         // Outputs the plugin admin footer.
         add_action( 'in_admin_footer', [ $this, 'veeraj_display_admin_footer' ] );
 
+        //Flyout menu
+        add_action( 'admin_footer', [ $this, 'output' ] );
+
         add_action( 'admin_enqueue_scripts', [ $this, 'enqueue_admin_assets' ] );
     }
 
@@ -201,6 +204,32 @@ class AdminPage {
         </div>
         <?php
     }
+
+    /**
+	 * Output menu.
+	 *
+	 * @since 3.0.0
+	 */
+	public function output() {
+
+		// Bail if we're not on a plugin admin page.
+		if ( ! $this->is_admin_page() ) {
+			return;
+		}
+
+		printf(
+			'<div id="veeraj-plugin-flyout">
+				<div id="veeraj-plugin-flyout-items">%1$s</div>
+				<a href="#" class="veeraj-plugin-flyout-button veeraj-plugin-flyout-head">
+					<div class="veeraj-plugin-flyout-label">%2$s</div>
+					<figure><img src="%3$s" alt="%2$s"/></figure>
+				</a>
+			</div>',
+			'',
+			esc_html__( 'See Quick Links', 'veeraj-plugin' ),
+			esc_url( VEERAJ_PLUGIN_URL .'assets/images/flyout-menu/mascot.svg' )
+		);
+	}
 
     /**
      * Check if the current page is the plugin's admin page.
