@@ -35,7 +35,7 @@ if ( ! function_exists( 'veeraj_debug_log' ) ) {
 // Load Composer autoload if available.
 if ( file_exists( VEERAJ_PLUGIN_DIR . 'vendor/autoload.php' ) ) {
     require_once VEERAJ_PLUGIN_DIR . 'vendor/autoload.php';
-    veeraj_debug_log( 'Composer autoload file loaded successfully.' );
+    //veeraj_debug_log( 'Composer autoload file loaded successfully.' );
 } else {
     veeraj_debug_log( 'Composer autoload file not found at ' . VEERAJ_PLUGIN_DIR . 'vendor/autoload.php' );
 }
