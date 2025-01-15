@@ -84,7 +84,7 @@ class Main {
         if ( $force_refresh || empty( $next_refresh_time ) || strtotime( $current_time ) > strtotime( $next_refresh_time ) ) {
             veeraj_debug_log( 'Fetching fresh data from API.' );
     
-            $next_refresh_time = date( 'Y-m-d H:i:s', strtotime( '+5 minutes', strtotime( $current_time ) ) );
+            $next_refresh_time = date( 'Y-m-d H:i:s', strtotime( '+1 hour', strtotime( $current_time ) ) );
             update_option( 'veeraj_next_refresh_time', $next_refresh_time );
             veeraj_debug_log( 'Updated next refresh time: ' . $next_refresh_time );
     
