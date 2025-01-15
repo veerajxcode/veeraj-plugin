@@ -56,9 +56,9 @@ function veeraj_plugin_init() {
     }
 
     $plugin = new \Veeraj\VeerajPlugin\Main();
-    veeraj_debug_log( 'Plugin instance created successfully.' );
+    //veeraj_debug_log( 'Plugin instance created successfully.' );
 
     $plugin->run();
-    veeraj_debug_log( 'Plugin run() method executed.' );
+    //veeraj_debug_log( 'Plugin run() method executed.' );
 }
 add_action( 'plugins_loaded', 'veeraj_plugin_init' );
